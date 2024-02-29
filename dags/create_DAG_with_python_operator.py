@@ -12,21 +12,23 @@ def_args = {
 # Defining a function that want to run in python
 # Adding a parameters to the function
 def greet_time(age, ti):
-    name = ti.xcom_pull(task_ids="get_name")
+    first_name = ti.xcom_pull(task_ids="get_name", key='first_name')
+    last_name = ti.xcom_pull(task_ids="get_name", key='last_name')
     now = datetime.now()
     format = '%H:%M:%S - %d/%m/%Y'
-    print(f"\nHello everyone at {datetime.strftime(now, format)} \nMy name is {name} and I am {age} years old.")
+    print(f"\nHello everyone at {datetime.strftime(now, format)} \nMy name is {first_name} {last_name} and I am {age} years old.")
 
 
-# using XCOMs
-def name():
-    return "Daniel Ezeh"
+# Pushing and pulling multiple arguments
+def name(ti):
+    ti.xcom_push(key='first_name', value="Daniel")
+    ti.xcom_push(key='last_name', value="Leonard")
 
 
 
 with DAG (
     default_args=def_args,
-    dag_id="my_DAG_with_python_operator_v04.8",
+    dag_id="my_DAG_with_python_operator_v04.9",
     description="my first DAG using python operator",
     start_date=datetime(2024, 2, 25, 6),
     schedule_interval="@daily"
