@@ -39,5 +39,6 @@ with DAG(
     # task1 >> task2
     # task1 >> task3
 
+
     # third method
     task1 >> [task2, task3]
