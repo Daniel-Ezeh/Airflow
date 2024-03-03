@@ -9,11 +9,16 @@ def_args = {
 }
 
 
+# crone expression
+# '0 0 * * *' = daily
+# use "www.crontab.guru" for easily creating cron schedule
+
+
 with DAG(
     default_args = def_args,
-    dag_id = 'dag_with_cron_expression_v01',
+    dag_id = 'dag_with_cron_expression_v02.3',
     start_date = datetime(2024,2,25),
-    schedule_interval = '@daily'
+    schedule_interval = '0 3 * * Tue-fri'
 ) as dag:
 
     task1 = BashOperator(
