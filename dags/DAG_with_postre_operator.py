@@ -10,7 +10,7 @@ def_args = {
 }
 
 with DAG(
-     dag_id="dag_with_postgre_operator_v02.1",
+     dag_id="dag_with_postgre_operator_v02.4",
      default_args=def_args,
      start_date=datetime(2024,3,1),
      schedule_interval='0 0 * * *'
@@ -38,4 +38,12 @@ with DAG(
     )
 
 
-    task1 >> task2
+    task3 = PostgresOperator(
+        task_id="deleting_data_from_table",
+        postgres_conn_id="postgres_localhost",
+        sql = '''
+            delete from dag_runs where dt = '{{ds}}' and dag_id ='{{dag.dag_id}};'
+        '''
+    )
+
+    task1 >> task3 >> task2
