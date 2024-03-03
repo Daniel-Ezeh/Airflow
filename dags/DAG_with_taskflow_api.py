@@ -14,7 +14,7 @@ def_args = {
 
 
 @dag(
-    dag_id="dag_with_taskflow_api_v01",
+    dag_id="dag_with_taskflow_api_v08",
     start_date=datetime(2024,3,1),
     schedule_interval="@daily"
 )
@@ -22,21 +22,27 @@ def_args = {
 def hello_world_etl():
 
     @task()
-    def get_name():
-        return "Daniel"
+    def get_name(multiple_outputs=True):
+        return {
+            'first_name':'Daniel',
+            'last_name':'Ezeh'
+        }
     
     @task()
     def get_age():
         return 20
     
     @task()
-    def greeting(name, age):
-        print(f'Hello at {my_time}, my name is {name}'
+    def greeting(first_name, last_name, age):
+        print(f'Hello at {my_time}, my name is {first_name} {last_name} \n'
               f'and I am {age} years old.')
     
-    name = get_name()
+    name_dict = get_name()
     age = get_age()
-    greeting(name, age)
+
+    greeting(first_name=name_dict['first_name'],
+              last_name=name_dict['last_name'], 
+              age=age)
 
 
 greet_dag = hello_world_etl()
