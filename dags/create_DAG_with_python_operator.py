@@ -4,7 +4,7 @@ from airflow.operators.python import PythonOperator
 
 def_args = {
     "owner":"Dan4sure",
-    'retris':5,
+    'retries':5,
     'retry_delay': timedelta(seconds=15)
 }
 
