@@ -4,7 +4,30 @@
 
 # Learn more from ready-to-use templates: https://www.gitpod.io/docs/introduction/getting-started/quickstart
 
+
+image:
+  file: .gitpod.Dockerfile
+
 tasks:
   - init: pip install -r requirements.txt
 
+  - name: Setup Airflow
+    init: |
+      # Install Airflow and dependencies
+      pip install apache-airflow==2.8.2
+      
+      # Initialize the Airflow database
+      airflow db init
+      
+      # Create a default user
+      airflow users create --username admin --password admin --firstname admin --lastname admin --role Admin --email admin@example.com
 
+    command: |
+      # Start Airflow webserver and scheduler
+      airflow webserver & airflow scheduler &
+      
+      # Wait for the webserver to start
+      gp await-port 8080
+ports:
+  - port: 8080
+    onOpen: open-browser
